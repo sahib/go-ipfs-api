@@ -1,6 +1,7 @@
 module github.com/sahib/go-ipfs-api
 
 require (
+	github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927
 	github.com/ipfs/go-ipfs-files v0.0.0-20190211184658-b9ab59872849
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/multiformats/go-multiaddr v0.0.1

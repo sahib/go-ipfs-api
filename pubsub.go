@@ -28,11 +28,12 @@ func newPubSubSubscription(resp *Response) *PubSubSubscription {
 }
 
 func peerIDFromBytes(b []byte) (string, error) {
-	if _, err := mh.Cast(b); err != nil {
+	h, err := mh.Cast(b)
+	if err != nil {
 		return "", err
 	}
 
-	return string(b), nil
+	return h.B58String(), nil
 }
 
 // Next waits for the next record and returns that.
@@ -59,6 +60,7 @@ func (s *PubSubSubscription) Next() (*Message, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &Message{
 		From:     from,
 		Data:     r.Data,

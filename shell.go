@@ -20,8 +20,6 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr-net"
 	tar "github.com/whyrusleeping/tar-utils"
-
-	p2pmetrics "github.com/libp2p/go-libp2p-metrics"
 )
 
 const (
@@ -472,10 +470,17 @@ func (s *Shell) ObjectStat(key string) (*ObjectStats, error) {
 	return &stat, nil
 }
 
+type Stats struct {
+	TotalIn  int64
+	TotalOut int64
+	RateIn   float64
+	RateOut  float64
+}
+
 // ObjectStat gets stats for the DAG object named by key. It returns
 // the stats of the requested Object or an error.
-func (s *Shell) StatsBW(ctx context.Context) (*p2pmetrics.Stats, error) {
-	v := &p2pmetrics.Stats{}
+func (s *Shell) StatsBW(ctx context.Context) (*Stats, error) {
+	v := &Stats{}
 	err := s.Request("stats/bw").Exec(ctx, &v)
 	return v, err
 }

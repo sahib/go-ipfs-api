@@ -3,12 +3,12 @@ package shell
 import (
 	"encoding/json"
 
-	"github.com/libp2p/go-libp2p-peer"
+	mh "github.com/multiformats/go-multihash"
 )
 
 // Message is a pubsub message.
 type Message struct {
-	From     peer.ID
+	From     string
 	Data     []byte
 	Seqno    []byte
 	TopicIDs []string
@@ -25,6 +25,14 @@ func newPubSubSubscription(resp *Response) *PubSubSubscription {
 	}
 
 	return sub
+}
+
+func peerIDFromBytes(b []byte) (string, error) {
+	if _, err := mh.Cast(b); err != nil {
+		return "", err
+	}
+
+	return string(b), nil
 }
 
 // Next waits for the next record and returns that.
@@ -47,7 +55,7 @@ func (s *PubSubSubscription) Next() (*Message, error) {
 		return nil, err
 	}
 
-	from, err := peer.IDFromBytes(r.From)
+	from, err := peerIDFromBytes(r.From)
 	if err != nil {
 		return nil, err
 	}
